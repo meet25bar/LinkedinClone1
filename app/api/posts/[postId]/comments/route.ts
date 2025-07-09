@@ -2,15 +2,14 @@ import connectDB from "@/lib/db";
 import { Post } from "@/models/post.model";
 import { NextRequest, NextResponse } from "next/server";
 
-// Correct type for route handler
 export async function GET(
   req: NextRequest,
-  context: { params: { postId: string } }
+  { params }: { params: { postId: string } }
 ) {
   try {
     await connectDB();
 
-    const { postId } = context.params;
+    const { postId } = params;
 
     const post = await Post.findById(postId).populate({
       path: "comments",
