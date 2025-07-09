@@ -2,15 +2,17 @@ import connectDB from "@/lib/db";
 import { Post } from "@/models/post.model";
 import { NextRequest, NextResponse } from "next/server";
 
-// fetch all comments for a post
-export const GET = async (
+// Correct type for route handler
+export async function GET(
   req: NextRequest,
-  { params }: { params: { postId: string } }
-) => {
+  context: { params: { postId: string } }
+) {
   try {
     await connectDB();
 
-    const post = await Post.findById(params.postId).populate({
+    const { postId } = context.params;
+
+    const post = await Post.findById(postId).populate({
       path: "comments",
       options: { sort: { createdAt: -1 } },
     });
@@ -24,4 +26,4 @@ export const GET = async (
     console.error("Error fetching comments:", err);
     return NextResponse.json({ error: "Error occurred" }, { status: 500 });
   }
-};
+}

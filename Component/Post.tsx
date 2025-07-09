@@ -12,6 +12,7 @@ import { IPostDocument } from "@/types/post" // Make sure to use frontend-safe t
 import PostContent from "./PostContent"
 import SocialOption from "./SocialOption"
 
+
 const Post = ({ post }: { post: IPostDocument }) => {
   const { user } = useUser()
   const isOwner = user?.id === post.User.userId
