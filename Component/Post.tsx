@@ -1,5 +1,6 @@
 "use client"
 
+
 import React from "react"
 import { useUser } from "@clerk/nextjs"
 import { Button } from "@/components/ui/button"
@@ -12,7 +13,10 @@ import SocialOption from "./SocialOption"
 import { deletePostAction } from "@/lib/serveraction"
 
 // Loosened the prop type to avoid missing-field errors
-const Post: React.FC<{ post: any }> = ({ post }) => {
+interface PostProps { post: any }
+
+const Post: React.FC<PostProps> = ({ post }) =>
+{
   const { user } = useUser()
   const isOwner = user?.id === post.User.userId
   const fullName = `${post.User.firstName} ${post.User.lastName}`
