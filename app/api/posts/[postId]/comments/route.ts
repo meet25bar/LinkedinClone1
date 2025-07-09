@@ -4,12 +4,13 @@ import { NextRequest, NextResponse } from "next/server";
 
 export async function GET(
   req: NextRequest,
-  { params }: { params: { postId: string } }
+  { params }: { params: Promise<{ postId: string }> }  // ← note Promise<…>
 ) {
   try {
     await connectDB();
 
-    const { postId } = params;
+    // await the Promise to get your actual params object
+    const { postId } = await params;
 
     const post = await Post.findById(postId).populate({
       path: "comments",
