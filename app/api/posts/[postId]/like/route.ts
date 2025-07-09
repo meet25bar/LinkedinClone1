@@ -5,14 +5,13 @@ import { NextRequest, NextResponse } from "next/server";
 // GET /api/posts/[postId]/like → Get all likes
 export async function GET(
   req: NextRequest,
-  context: { params: Record<string, string> }
+  { params }: { params: Promise<{ postId: string }> }
 ) {
   try {
     await connectDB();
+    const { postId } = await params;
 
-    const postId = context.params.postId;
     const post = await Post.findById(postId);
-
     if (!post) {
       return NextResponse.json({ error: "Post not found." }, { status: 404 });
     }
@@ -27,13 +26,12 @@ export async function GET(
 // POST /api/posts/[postId]/like → Like a post
 export async function POST(
   req: NextRequest,
-  context: { params: Record<string, string> }
+  { params }: { params: Promise<{ postId: string }> }
 ) {
   try {
     await connectDB();
-
+    const { postId } = await params;
     const { userId } = await req.json();
-    const postId = context.params.postId;
 
     const post = await Post.findById(postId);
     if (!post) {
@@ -41,7 +39,6 @@ export async function POST(
     }
 
     await post.updateOne({ $addToSet: { likes: userId } });
-
     return NextResponse.json({ message: "Liked." }, { status: 200 });
   } catch (error) {
     console.error("Error liking post:", error);
